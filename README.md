@@ -7,7 +7,7 @@ Youtube 썸네일을 단서로 진행하는 게임입니다.
 
 # Wireframe
 
-![asdf](./src/assets/images/wireframe.svg)
+![asdf](./assets/images/wireframe.svg)
 [Excalidraw Wireframe](https://excalidraw.com/#json=z9RZSxULKYlin7jLBcKSE,uXdUxOajm5AGC4F_eARF7Q)
 
 ## 사용 기술
