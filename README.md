@@ -1,4 +1,6 @@
-# thumbnails
+# Thumbnails
+
+Simple game to guess video with more view counts using Youtube thumbnails
 
 Youtube 썸네일을 단서로 진행하는 게임입니다.
 
