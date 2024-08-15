@@ -1,4 +1,4 @@
-import Navbar from "@/components/Layout/Navbar";
+import Navbar from "@/components/Common/Layout/Navbar";
 import React from "react";
 
 interface Props {
