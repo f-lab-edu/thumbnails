@@ -1,11 +1,31 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import profilePic from "@/assets/t.webp";
 import { useRouter } from "next/router";
+import { createClient } from "@/utils/supabase/component";
 
 export default function Navbar() {
   const router = useRouter();
   const pathname = router.pathname;
+
+  const [email, setEmail] = useState<string | undefined>("Login");
+
+  useEffect(() => {
+    const revalidateUser = async () => {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        setEmail(user?.email);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    revalidateUser();
+  }, [email]);
 
   const isActive = (path: string) => {
     return pathname === path;
@@ -39,7 +59,7 @@ export default function Navbar() {
             className="mr-2"
           />
           <Link href="/login">
-            <span className="text-3xl text-black">Login</span>
+            <span className="text-3xl text-black">{email || "Login"}</span>
           </Link>
         </div>
       </div>
