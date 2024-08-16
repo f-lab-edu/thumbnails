@@ -14,10 +14,6 @@ vi.mock("@/utils/supabase/component", () => ({
   createClient: vi.fn(),
 }));
 
-vi.mock("@/utils/supabase/component", () => ({
-  createClient: vi.fn(),
-}));
-
 vi.mock("react-toastify", () => ({
   ToastContainer: vi.fn(),
   toast: {
@@ -49,7 +45,6 @@ describe("LoginPage", () => {
     signInWithPassword.mockClear();
     signUp.mockClear();
     getUser.mockClear();
-    // toast.error.mockClear();
   });
 
   it("로그인 페이지가 렌더링된다", () => {
