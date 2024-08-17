@@ -47,6 +47,20 @@ describe("LoginPage", () => {
     getUser.mockClear();
   });
 
+  const fillAndSubmitForm = async (
+    buttonName: RegExp,
+    email = "test@example.com",
+    password = "abc1234"
+  ) => {
+    fireEvent.input(screen.getByLabelText(/email/i), {
+      target: { value: email },
+    });
+    fireEvent.input(screen.getByLabelText(/password/i), {
+      target: { value: password },
+    });
+    fireEvent.click(screen.getByRole("button", { name: buttonName }));
+  };
+
   it("로그인 페이지가 렌더링된다", () => {
     render(<LoginPage />);
 
@@ -61,19 +75,12 @@ describe("LoginPage", () => {
 
     render(<LoginPage />);
 
-    fireEvent.input(screen.getByLabelText(/email/i), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.input(screen.getByLabelText(/password/i), {
-      target: { value: "password" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /log in/i }));
+    await fillAndSubmitForm(/log in/i);
 
     await waitFor(() => {
       expect(signInWithPassword).toHaveBeenCalledWith({
         email: "test@example.com",
-        password: "password",
+        password: "abc1234",
       });
     });
 
@@ -87,19 +94,12 @@ describe("LoginPage", () => {
 
     render(<LoginPage />);
 
-    fireEvent.input(screen.getByLabelText(/email/i), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.input(screen.getByLabelText(/password/i), {
-      target: { value: "password" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /log in/i }));
+    await fillAndSubmitForm(/log in/i);
 
     await waitFor(() => {
       expect(signInWithPassword).toHaveBeenCalledWith({
         email: "test@example.com",
-        password: "password",
+        password: "abc1234",
       });
     });
     // Check that the toast.error function is called with the correct message
@@ -116,19 +116,12 @@ describe("LoginPage", () => {
 
     render(<LoginPage />);
 
-    fireEvent.input(screen.getByLabelText(/email/i), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.input(screen.getByLabelText(/password/i), {
-      target: { value: "password" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /sign up/i }));
+    await fillAndSubmitForm(/sign up/i);
 
     await waitFor(() => {
       expect(signUp).toHaveBeenCalledWith({
         email: "test@example.com",
-        password: "password",
+        password: "abc1234",
       });
     });
 
