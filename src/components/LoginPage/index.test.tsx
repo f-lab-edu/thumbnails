@@ -23,13 +23,14 @@ vi.mock("react-toastify", () => ({
 
 describe("LoginPage", () => {
   const push = vi.fn();
+  const replace = vi.fn();
   const signInWithPassword = vi.fn();
   const signUp = vi.fn();
   const getUser = vi.fn();
 
   beforeEach(() => {
     // Mock useRouter hook
-    (useRouter as any).mockReturnValue({ push });
+    (useRouter as any).mockReturnValue({ push, replace });
 
     // Mock supabase client methods
     (createClient as any).mockReturnValue({
@@ -42,6 +43,7 @@ describe("LoginPage", () => {
 
     // Reset mocks
     push.mockClear();
+    replace.mockClear();
     signInWithPassword.mockClear();
     signUp.mockClear();
     getUser.mockClear();
@@ -84,7 +86,7 @@ describe("LoginPage", () => {
       });
     });
 
-    expect(push).toHaveBeenCalledWith("/games");
+    expect(replace).toHaveBeenCalledWith("/games");
   });
 
   it("로그인 실패 시 에러 토스트가 표시된다", async () => {
