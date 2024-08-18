@@ -23,7 +23,7 @@ vi.mock("react-toastify", () => ({
 
 describe("LoginPage", () => {
   const email = "test@example.com";
-  const password = "test123";
+  const pwd = "abc1234";
   const push = vi.fn();
   const replace = vi.fn();
   const signInWithPassword = vi.fn();
@@ -84,7 +84,7 @@ describe("LoginPage", () => {
     await waitFor(() => {
       expect(signInWithPassword).toHaveBeenCalledWith({
         email,
-        password,
+        password: pwd,
       });
     });
 
@@ -103,7 +103,7 @@ describe("LoginPage", () => {
     await waitFor(() => {
       expect(signInWithPassword).toHaveBeenCalledWith({
         email,
-        password,
+        password: pwd,
       });
     });
     // Check that the toast.error function is called with the correct message
@@ -125,7 +125,7 @@ describe("LoginPage", () => {
     await waitFor(() => {
       expect(signUp).toHaveBeenCalledWith({
         email,
-        password,
+        password: pwd,
       });
     });
 
