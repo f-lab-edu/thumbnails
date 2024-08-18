@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { createClient } from "@/utils/supabase/component";
 import { useForm } from "react-hook-form";
@@ -20,11 +21,15 @@ export default function LoginPage() {
     },
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   async function logIn({ email, password }: LoginFormInput) {
+    setIsLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+    setIsLoading(false);
     if (error) {
       toast.error(
         `로그인에 실패하였습니다. 다시 시도해주세요. 이유: ${error.message}`
@@ -35,7 +40,9 @@ export default function LoginPage() {
   }
 
   async function signUp({ email, password }: LoginFormInput) {
+    setIsLoading(true);
     const { error } = await supabase.auth.signUp({ email, password });
+    setIsLoading(false);
     if (error) {
       const errorMsg =
         error.message === "Email rate limit exceeded"
@@ -100,20 +107,28 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <button
-            className="block mx-auto mb-4 rounded-sm bg-blue-500 py-2 px-3"
-            type="button"
-            onClick={handleSubmit(logIn)}
-          >
-            Log in
-          </button>
-          <button
-            className="block mx-auto mb-4 rounded-sm bg-orange-500 py-2 px-3"
-            type="button"
-            onClick={handleSubmit(signUp)}
-          >
-            Sign up
-          </button>
+          {isLoading ? (
+            <div className="flex justify-center">
+              <h1>Loading...</h1>
+            </div>
+          ) : (
+            <>
+              <button
+                className="block mx-auto mb-4 rounded-sm bg-blue-500 py-2 px-3"
+                type="button"
+                onClick={handleSubmit(logIn)}
+              >
+                Log in
+              </button>
+              <button
+                className="block mx-auto mb-4 rounded-sm bg-orange-500 py-2 px-3"
+                type="button"
+                onClick={handleSubmit(signUp)}
+              >
+                Sign up
+              </button>
+            </>
+          )}
         </form>
       </main>
     </Layout>

@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
-import LoginPage from "@/components/LoginPage"; // Adjust the path to your component
+import LoginPage from "@/components/LoginPage";
 import { useRouter } from "next/router";
 import { createClient } from "@/utils/supabase/component";
-import { toast } from "react-toastify"; // If using react-toastify
+import { toast } from "react-toastify";
 
-// Mock the required modules
+// 필요한 모듈 모킹
 vi.mock("next/router", () => ({
   useRouter: vi.fn(),
 }));
@@ -28,39 +28,36 @@ describe("LoginPage", () => {
   const replace = vi.fn();
   const signInWithPassword = vi.fn();
   const signUp = vi.fn();
-  const getUser = vi.fn();
 
   beforeEach(() => {
-    // Mock useRouter hook
+    // useRouter 훅 모킹
     (useRouter as any).mockReturnValue({ push, replace });
 
-    // Mock supabase client methods
+    // supabase 클라이언트 메서드 모킹
     (createClient as any).mockReturnValue({
       auth: {
         signInWithPassword,
         signUp,
-        getUser,
       },
     });
 
-    // Reset mocks
+    // 모킹 초기화
     push.mockClear();
     replace.mockClear();
     signInWithPassword.mockClear();
     signUp.mockClear();
-    getUser.mockClear();
   });
 
   const fillAndSubmitForm = async (
     buttonName: RegExp,
-    email = "test@example.com",
-    password = "abc1234"
+    emailValue = email,
+    passwordValue = secret
   ) => {
     fireEvent.input(screen.getByLabelText(/email/i), {
-      target: { value: email },
+      target: { value: emailValue },
     });
     fireEvent.input(screen.getByLabelText(/password/i), {
-      target: { value: password },
+      target: { value: passwordValue },
     });
     fireEvent.click(screen.getByRole("button", { name: buttonName }));
   };
@@ -106,13 +103,12 @@ describe("LoginPage", () => {
         password: secret,
       });
     });
-    // Check that the toast.error function is called with the correct message
+
     expect(toast.error).toHaveBeenCalledWith(
       "로그인에 실패하였습니다. 다시 시도해주세요. 이유: Login failed"
     );
 
-    // Expect no navigation if there's an error
-    expect(push).not.toHaveBeenCalled();
+    expect(replace).not.toHaveBeenCalled();
   });
 
   it("폼이 제출되고 회원가입이 성공적으로 이루어진다", async () => {
