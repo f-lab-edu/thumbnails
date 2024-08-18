@@ -3,10 +3,6 @@ import type { GetServerSidePropsContext } from "next";
 import { createClient } from "@/utils/supabase/server-props";
 import ScorePage from "@/components/ScorePage";
 
-export default function Score({ user }: { user: User }) {
-  return <ScorePage user={user} />;
-}
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const supabase = createClient(context);
 
@@ -26,4 +22,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       user: data.user,
     },
   };
+}
+
+export default function Score({ user }: { user: User }) {
+  return <ScorePage user={user} />;
 }

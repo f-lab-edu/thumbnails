@@ -4,11 +4,7 @@ import { useForm } from "react-hook-form";
 import Layout from "@/components/Common/Layout";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-interface LoginFormInput {
-  email: string;
-  password: string;
-}
+import { LoginFormInput } from "@/types/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,14 +30,14 @@ export default function LoginPage() {
         `로그인에 실패하였습니다. 다시 시도해주세요. 이유: ${error.message}`
       );
     } else {
-      router.push("/games");
+      router.replace("/games");
     }
   }
 
   async function signUp({ email, password }: LoginFormInput) {
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) {
-      let errorMsg =
+      const errorMsg =
         error.message === "Email rate limit exceeded"
           ? "이메일 사용 API 제한 횟수 초과"
           : error.message;

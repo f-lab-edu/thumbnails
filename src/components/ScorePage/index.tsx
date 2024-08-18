@@ -1,9 +1,13 @@
 import Layout from "@/components/Common/Layout";
 import type { User } from "@supabase/supabase-js";
 
-export default function ScorePage({ user }: { user: User }) {
+interface Props {
+  user: User;
+}
+
+export default function ScorePage({ user }: Props) {
   return (
-    <Layout>
+    <Layout user={user}>
       <h1>Hello, {user.email || "user"}! This is Your Score Page</h1>;
     </Layout>
   );
