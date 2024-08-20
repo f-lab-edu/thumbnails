@@ -6,6 +6,7 @@ import Layout from "@/components/Common/Layout";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoginFormInput } from "@/types/auth";
+import { QueryError } from "@supabase/supabase-js";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,44 +26,40 @@ export default function LoginPage() {
 
   async function logIn({ email, password }: LoginFormInput) {
     setIsLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    setIsLoading(false);
-    if (error) {
-      toast.error(
-        `로그인에 실패하였습니다. 다시 시도해주세요. 이유: ${error.message}`
-      );
-    } else {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
       router.replace("/games");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : error;
+      toast.error(
+        `로그인에 실패하였습니다. 다시 시도해주세요. 이유: ${errorMessage}`
+      );
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function signUp({ email, password }: LoginFormInput) {
     setIsLoading(true);
-    const { error } = await supabase.auth.signUp({ email, password });
-    setIsLoading(false);
-    if (error) {
-      const errorMsg =
-        error.message === "Email rate limit exceeded"
-          ? "이메일 사용 API 제한 횟수 초과"
-          : error.message;
-      toast.error(
-        `회원가입에 실패하였습니다. 다시 시도해주세요. 이유: ${errorMsg}`,
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        }
-      );
-    } else {
+    try {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        throw new Error(error.message);
+      }
       router.push("/games");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : error;
+      toast.error(
+        `회원가입에 실패하였습니다. 다시 시도해주세요. 이유: ${errorMessage}`
+      );
+    } finally {
+      setIsLoading(false);
     }
   }
 
