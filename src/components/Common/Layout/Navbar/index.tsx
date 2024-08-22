@@ -1,15 +1,10 @@
 import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import Link from "next/link";
-import Image from "next/image";
-import profilePic from "@/assets/t.webp";
 import { usePathname } from "next/navigation";
-import type { User } from "@supabase/supabase-js";
+import LoginStatus from "~/src/components/Common/Layout/LoginStatus";
 
-interface Props {
-  user?: User;
-}
-
-export default function Navbar({ user }: Props) {
+export default function Navbar() {
   const pathname = usePathname();
 
   const isActive = (path: string) => {
@@ -34,22 +29,11 @@ export default function Navbar({ user }: Props) {
           </span>
         </Link>
       </div>
-      <div className="w-1/6 h-16">
-        <div className="flex justify-end">
-          <Image
-            src={profilePic}
-            width={40}
-            height={40}
-            alt="profile picture"
-            className="mr-2"
-          />
-          <Link href="/login">
-            <span className="text-3xl text-black">
-              {user?.email || "Login"}
-            </span>
-          </Link>
-        </div>
-      </div>
+      <ErrorBoundary fallback={<div>Something went wrong.</div>}>
+        <Suspense fallback={<span>Loading...</span>}>
+          <LoginStatus />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

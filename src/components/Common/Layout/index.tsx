@@ -1,17 +1,15 @@
 import Navbar from "@/components/Common/Layout/Navbar";
 import React from "react";
 import { ToastContainer } from "react-toastify";
-import type { User } from "@supabase/supabase-js";
 
 interface Props {
   children: React.ReactNode;
-  user?: User;
 }
 
-export default function Layout({ children, user }: Props) {
+export default function Layout({ children }: Props) {
   return (
-    <div>
-      <Navbar user={user} />
+    <>
+      <Navbar />
       {children}
       <ToastContainer
         position="top-right"
@@ -25,6 +23,6 @@ export default function Layout({ children, user }: Props) {
         pauseOnHover
         theme="light"
       />
-    </div>
+    </>
   );
 }

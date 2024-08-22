@@ -1,16 +1,14 @@
-import { useState } from "react";
 import { useRouter } from "next/router";
-import { createClient } from "@/utils/supabase/component";
 import { useForm } from "react-hook-form";
 import Layout from "@/components/Common/Layout";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import { LoginFormInput } from "@/types/auth";
-import { QueryError } from "@supabase/supabase-js";
+import { requestToSignIn, requestToSignUp } from "@/requests/auth";
+import useAsync from "~/src/hooks/useAsync";
 
 export default function LoginPage() {
   const router = useRouter();
-  const supabase = createClient();
   const {
     register,
     handleSubmit,
@@ -22,44 +20,31 @@ export default function LoginPage() {
     },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const { loading: logInLoading, execute: executeLogIn } = useAsync(
+    (email, password) => requestToSignIn(email, password),
+    "로그인 성공!",
+    "로그인에 실패하였습니다. 다시 시도해주세요."
+  );
 
-  async function logIn({ email, password }: LoginFormInput) {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
+  const { loading: signUpLoading, execute: executeSignUp } = useAsync(
+    (email, password) => requestToSignUp(email, password),
+    "회원가입을 위해 이메일을 확인해 주세요!",
+    "회원가입에 실패하였습니다. 다시 시도해주세요."
+  );
+
+  const isLoading = logInLoading || signUpLoading;
+
+  async function handleLogIn({ email, password }: LoginFormInput) {
+    const result = await executeLogIn(email, password);
+    if (result) {
       router.replace("/games");
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : error;
-      toast.error(
-        `로그인에 실패하였습니다. 다시 시도해주세요. 이유: ${errorMessage}`
-      );
-    } finally {
-      setIsLoading(false);
     }
   }
 
-  async function signUp({ email, password }: LoginFormInput) {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        throw new Error(error.message);
-      }
+  async function handleSignUp({ email, password }: LoginFormInput) {
+    const result = await executeSignUp(email, password);
+    if (result) {
       router.push("/games");
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : error;
-      toast.error(
-        `회원가입에 실패하였습니다. 다시 시도해주세요. 이유: ${errorMessage}`
-      );
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -113,14 +98,14 @@ export default function LoginPage() {
               <button
                 className="block mx-auto mb-4 rounded-sm bg-blue-500 py-2 px-3"
                 type="button"
-                onClick={handleSubmit(logIn)}
+                onClick={handleSubmit(handleLogIn)}
               >
                 Log in
               </button>
               <button
                 className="block mx-auto mb-4 rounded-sm bg-orange-500 py-2 px-3"
                 type="button"
-                onClick={handleSubmit(signUp)}
+                onClick={handleSubmit(handleSignUp)}
               >
                 Sign up
               </button>

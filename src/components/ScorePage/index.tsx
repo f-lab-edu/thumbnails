@@ -7,7 +7,7 @@ interface Props {
 
 export default function ScorePage({ user }: Props) {
   return (
-    <Layout user={user}>
+    <Layout>
       <h1>Hello, {user.email || "user"}! This is Your Score Page</h1>;
     </Layout>
   );
