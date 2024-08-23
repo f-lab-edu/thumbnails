@@ -32,8 +32,6 @@ export default function LoginPage() {
     "회원가입에 실패하였습니다. 다시 시도해주세요."
   );
 
-  const isLoading = logInLoading || signUpLoading;
-
   async function handleLogIn({ email, password }: LoginFormInput) {
     const result = await executeLogIn(email, password);
     if (result) {
@@ -47,6 +45,8 @@ export default function LoginPage() {
       router.push("/games");
     }
   }
+
+  const isLoading = logInLoading || signUpLoading;
 
   return (
     <Layout>

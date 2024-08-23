@@ -29,7 +29,7 @@ export default function Navbar() {
           </span>
         </Link>
       </div>
-      <ErrorBoundary fallback={<div>Something went wrong.</div>}>
+      <ErrorBoundary fallback={<div>유저 정보 불러오기 실패</div>}>
         <Suspense fallback={<span>Loading...</span>}>
           <LoginStatus />
         </Suspense>

@@ -1,10 +1,16 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { authenticateUser } from "@/requests/auth";
 
-import {
-  createQueryKeys,
-  inferQueryKeys,
-} from "@lukemorales/query-key-factory";
+import { createQueryKeys } from "@lukemorales/query-key-factory";
+
+import { getUserEmail } from "~/src/utils/storage/auth";
+
+const authenticateQueryOptions = queryOptions({
+  queryKey: ["authenticate"],
+  queryFn: authenticateUser,
+  // staleTime: 300 * 1000, // Supabase session lasts for 5 minutes ~ 1 hour
+  initialData: getUserEmail() || "Login",
+});
 
 export const auth = createQueryKeys("auth", {
   authenticate: {
@@ -14,7 +20,5 @@ export const auth = createQueryKeys("auth", {
 });
 
 export function useAuthenticate() {
-  return useSuspenseQuery(auth.authenticate);
+  return useSuspenseQuery(authenticateQueryOptions);
 }
-
-export type TodoKeys = inferQueryKeys<typeof auth>;
