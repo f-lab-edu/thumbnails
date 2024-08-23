@@ -1,28 +1,32 @@
-import type { User } from "@supabase/supabase-js";
-import type { GetServerSidePropsContext } from "next";
-import { createClient } from "@/utils/supabase/server-props";
-import ScorePage from "@/components/ScorePage";
-import { getUserEmail } from "@/utils/storage/auth";
+import dynamic from "next/dynamic";
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const supabase = createClient(context);
+const ScorePage = dynamic(() => import("@/components/ScorePage"), {
+  ssr: false,
+});
 
-  return {
-    props: {
-      email: getUserEmail(),
-    },
-  };
-}
+export default ScorePage;
 
-export default function Score({ email }) {
-  console.log("email: ", email);
-  return <ScorePage />;
-}
+/**
+ * Server 환경 테스트를 위해 남겨놓음. 추후 삭제될 예정
+ */
 
-// import dynamic from "next/dynamic";
+// import type { User } from "@supabase/supabase-js";
+// import type { GetServerSidePropsContext } from "next";
+// import { createClient } from "@/utils/supabase/server-props";
+// import ScorePage from "@/components/ScorePage";
+// import { getUserEmail } from "@/utils/storage/auth";
 
-// const ScorePage = dynamic(() => import("@/components/ScorePage"), {
-//   ssr: false,
-// });
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   const supabase = createClient(context);
 
-// export default ScorePage;
+//   return {
+//     props: {
+//       email: getUserEmail(),
+//     },
+//   };
+// }
+
+// export default function Score({ email }) {
+//   console.log("email: ", email);
+//   return <ScorePage />;
+// }

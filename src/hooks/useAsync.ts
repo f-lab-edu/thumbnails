@@ -59,7 +59,7 @@ function useAsync<T>(
           const errorMessage =
             error instanceof Error ? error.message : String(error);
           setError(errorMessage);
-          throw new Error(`${defaultErrorMessage} 이유: ${errorMessage}`);
+          toast.error(`${defaultErrorMessage} 이유: ${errorMessage}`);
         })
         .finally(() => {
           setLoading(false);
