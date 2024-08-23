@@ -9,7 +9,7 @@ const authenticateQueryOptions = queryOptions({
   queryKey: ["authenticate"],
   queryFn: authenticateUser,
   // staleTime: 300 * 1000, // Supabase session lasts for 5 minutes ~ 1 hour
-  initialData: getUserEmail() || "Login",
+  initialData: getUserEmail(),
 });
 
 export const auth = createQueryKeys("auth", {
