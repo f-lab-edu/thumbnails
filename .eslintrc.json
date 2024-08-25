@@ -1,8 +1,20 @@
 {
   "extends": [
     "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/strict",
+    "plugin:@typescript-eslint/stylistic",
     "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier"
   ],
-  "plugins": ["testing-library", "prettier"]
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    // this setting is required to use rules that require type information
+    "project": true
+  },
+  "plugins": ["testing-library", "prettier", "@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/strict-boolean-expressions": "error"
+  },
+  "root": true
 }
