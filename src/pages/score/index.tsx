@@ -1,10 +1,4 @@
-import dynamic from "next/dynamic";
-
-const ScorePage = dynamic(() => import("@/components/ScorePage"), {
-  ssr: false,
-});
-
-export default ScorePage;
+export { default } from "@/components/ScorePage";
 
 /**
  * Server 환경 테스트를 위해 남겨놓음. 추후 삭제될 예정

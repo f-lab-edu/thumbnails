@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import "@/styles/globals.css";
@@ -14,9 +15,8 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
-
   /**
    * 처리되지 않은 Promise 거부 이벤트를 처리하는 함수입니다.
    *
@@ -31,7 +31,6 @@ export default function App({ Component, pageProps }: AppProps) {
    */
   const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
     console.warn(`UNHANDLED PROMISE REJECTION: ${event.reason}`);
-    router.push("/error");
     toast.error(`에러가 발생하였습니다. 이유: ${event.reason}`);
   };
 
@@ -63,4 +62,8 @@ export default function App({ Component, pageProps }: AppProps) {
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
-}
+};
+
+export default dynamic(() => Promise.resolve(App), {
+  ssr: false,
+});
