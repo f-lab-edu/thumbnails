@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -16,7 +15,6 @@ const queryClient = new QueryClient({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter();
   /**
    * 처리되지 않은 Promise 거부 이벤트를 처리하는 함수입니다.
    *
