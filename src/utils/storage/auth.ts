@@ -4,6 +4,28 @@ export enum StorageType {
   SESSION = "sessionStorage",
 }
 
+export function createStorage(type: StorageType = StorageType.LOCAL) {
+  if (typeof window === "undefined") {
+    return;
+  }
+  const storage = type === StorageType.LOCAL ? localStorage : sessionStorage;
+  return {
+    create: function (key: string) {
+      return {
+        set: function (value: string) {
+          storage.setItem(key, value);
+        },
+        get: function () {
+          return storage.getItem(key);
+        },
+        delete: function () {
+          storage.removeItem(key);
+        },
+      };
+    },
+  };
+}
+
 // 스토리지에 값을 저장하는 함수
 export function setUserEmail(
   email: string,
