@@ -22,14 +22,12 @@ export default function LoginPage() {
 
   const { loading: logInLoading, execute: executeLogIn } = useAsync(
     (email, password) => requestToSignIn(email, password),
-    "로그인 성공!",
-    "로그인에 실패하였습니다. 다시 시도해주세요."
+    "로그인 성공!"
   );
 
   const { loading: signUpLoading, execute: executeSignUp } = useAsync(
     (email, password) => requestToSignUp(email, password),
-    "회원가입을 위해 이메일을 확인해 주세요!",
-    "회원가입에 실패하였습니다. 다시 시도해주세요."
+    "회원가입을 위해 이메일을 확인해 주세요!"
   );
 
   async function handleLogIn({ email, password }: LoginFormInput) {

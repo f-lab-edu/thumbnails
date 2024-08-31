@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/component";
+import { LoginError, SignUpError } from "~/src/utils/common/errors";
 import { emailStorage } from "@/utils/storage/index";
 
 const supabase = createClient();
@@ -21,8 +22,9 @@ export async function requestToSignIn(email: string, password: string) {
     email,
     password,
   });
+
   if (error) {
-    throw new Error(error.message);
+    throw new LoginError(error.message);
   }
 
   return handleUserEmail(data.user?.email) ? data : undefined;
@@ -32,7 +34,7 @@ export async function requestToSignUp(email: string, password: string) {
   const { data, error } = await supabase.auth.signUp({ email, password });
 
   if (error) {
-    throw new Error(error.message);
+    throw new SignUpError(error.message);
   }
 
   return handleUserEmail(data.user?.email) ? data : undefined;

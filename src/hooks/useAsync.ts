@@ -38,7 +38,7 @@ type AsyncFunction<T> = (...args: any[]) => Promise<T>;
 function useAsync<T>(
   asyncFunction: AsyncFunction<T>,
   defaultSuccessMessage: string,
-  defaultErrorMessage: string
+  defaultErrorMessage?: string
 ) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -59,7 +59,7 @@ function useAsync<T>(
           const errorMessage =
             error instanceof Error ? error.message : String(error);
           setError(errorMessage);
-          toast.error(`${defaultErrorMessage} 이유: ${errorMessage}`);
+          toast.error(errorMessage);
         })
         .finally(() => {
           setLoading(false);
