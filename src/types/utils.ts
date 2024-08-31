@@ -3,3 +3,12 @@ export enum StorageType {
   LOCAL = "localStorage",
   SESSION = "sessionStorage",
 }
+
+export interface StorageItem {
+  get: () => any;
+  set: (value: any) => void;
+  delete: (key: string) => void;
+}
+export interface StorageObject {
+  create: (key: string) => StorageItem;
+}

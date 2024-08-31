@@ -1,12 +1,12 @@
 import { createClient } from "@/utils/supabase/component";
-import { setUserEmail } from "~/src/utils/storage/auth";
+import { emailStorage } from "@/utils/storage/index";
 
 const supabase = createClient();
 
 // 유저 이메일을 스토리지에 설정하고 반환하는 공통 함수
 function handleUserEmail(email?: string) {
   if (email) {
-    setUserEmail(email);
+    emailStorage.set(email);
     return email;
   }
 }
@@ -21,7 +21,6 @@ export async function requestToSignIn(email: string, password: string) {
     email,
     password,
   });
-
   if (error) {
     throw new Error(error.message);
   }
