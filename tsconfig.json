@@ -17,7 +17,7 @@
       "~/*": ["./*"],
       "@/*": ["./src/*"]
     },
-    "types": ["vitest/globals"]
+    "types": ["jest"]
   },
   "include": [
     "next-env.d.ts",

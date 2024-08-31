@@ -7,7 +7,7 @@ export enum StorageType {
 export interface StorageItem {
   get: () => any;
   set: (value: any) => void;
-  delete: (key: string) => void;
+  delete: () => void;
 }
 export interface StorageObject {
   create: (key: string) => StorageItem;
