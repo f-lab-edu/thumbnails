@@ -12,3 +12,15 @@ export interface StorageItem {
 export interface StorageObject {
   create: (key: string) => StorageItem;
 }
+
+export type StorageValueType =
+  | Function
+  | Date
+  | RegExp
+  | Set<any>
+  | Map<any, any>
+  | object
+  | string
+  | number
+  | boolean
+  | null;

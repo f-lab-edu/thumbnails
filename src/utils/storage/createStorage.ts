@@ -1,4 +1,9 @@
-import { StorageType, StorageObject, StorageItem } from "@/types/utils";
+import {
+  StorageType,
+  StorageObject,
+  StorageItem,
+  StorageValueType,
+} from "@/types/utils";
 import { serializeForStorage, deserializeFromStorage } from "@/utils/storage";
 
 /**
@@ -28,7 +33,9 @@ const dummyStorage: StorageObject = {
  * @param type - 스토리지 타입: localStorage 또는 sessionStorage (기본값: localStorage)
  * @returns 스토리지 객체
  */
-function createStorage(type: StorageType = StorageType.LOCAL): StorageObject {
+function createStorage<T extends StorageValueType>(
+  type: StorageType = StorageType.LOCAL
+): StorageObject {
   if (typeof window === "undefined") {
     return dummyStorage; // return dummy object for not browser environment
   }
@@ -36,11 +43,11 @@ function createStorage(type: StorageType = StorageType.LOCAL): StorageObject {
   return {
     create: function (key: string) {
       return {
-        set: function (value: any) {
+        set: function (value: T) {
           storage.setItem(key, serializeForStorage(value));
         },
-        get: function () {
-          return storage.getItem(deserializeFromStorage(key));
+        get: function (): T {
+          return deserializeFromStorage(storage.getItem(key) || "");
         },
         delete: function () {
           storage.removeItem(key);
