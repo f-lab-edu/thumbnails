@@ -8,7 +8,7 @@ export default function LoginStatus() {
     <div className="w-1/6 h-16">
       <div className="flex justify-end">
         <Link href="/login">
-          <span className="text-3xl text-black">{data || "Login"}</span>
+          <span className="text-3xl text-black">{data?.email || "Login"}</span>
         </Link>
       </div>
     </div>

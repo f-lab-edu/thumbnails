@@ -14,8 +14,7 @@ export function serializeForStorage<T>(value: T): string {
     case value instanceof Map:
       return `__map:${JSON.stringify([...value])}`;
     case typeof value === "object" && value !== null:
-      // Recursively serialize nested objects/arrays
-      return JSON.stringify(value, (_key, val) => serializeForStorage(val));
+      return JSON.stringify(value);
     case typeof value === "string":
       return value;
     default:
@@ -56,4 +55,4 @@ export function deserializeFromStorage<T extends StorageValueType>(
 
 const storage = createStorage();
 
-export const emailStorage = storage.create("email");
+export const userStorage = storage.create("user");

@@ -1,20 +1,21 @@
 import { createClient } from "@/utils/supabase/component";
 import { LoginError, SignUpError } from "~/src/utils/common/errors";
-import { emailStorage } from "@/utils/storage/index";
+import { userStorage } from "@/utils/storage/index";
+import { User } from "@supabase/supabase-js";
 
 const supabase = createClient();
 
 // 유저 이메일을 스토리지에 설정하고 반환하는 공통 함수
-function handleUserEmail(email?: string) {
-  if (email) {
-    emailStorage.set(email);
-    return email;
+function handleUserData(user?: User | null): User {
+  if (user) {
+    userStorage.set(user);
   }
+  return userStorage.get();
 }
 
-export async function authenticateUser(): Promise<string | undefined> {
+export async function authenticateUser(): Promise<User> {
   const { data } = await supabase.auth.getUser();
-  return handleUserEmail(data.user?.email);
+  return handleUserData(data.user);
 }
 
 export async function requestToSignIn(email: string, password: string) {
@@ -27,7 +28,7 @@ export async function requestToSignIn(email: string, password: string) {
     throw new LoginError(error.message);
   }
 
-  return handleUserEmail(data.user?.email) ? data : undefined;
+  return handleUserData(data.user) ? data : undefined;
 }
 
 export async function requestToSignUp(email: string, password: string) {
@@ -37,5 +38,5 @@ export async function requestToSignUp(email: string, password: string) {
     throw new SignUpError(error.message);
   }
 
-  return handleUserEmail(data.user?.email) ? data : undefined;
+  return handleUserData(data.user) ? data : undefined;
 }
