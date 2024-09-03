@@ -4,7 +4,7 @@ import {
   StorageItem,
   StorageValueType,
 } from "@/types/utils";
-import { serializeForStorage, deserializeFromStorage } from "@/utils/storage";
+import { serializeData, deserializeData } from "@/utils/storage";
 
 /**
  * 브라우저 환경이 아닌 경우 사용할 더미 스토리지 객체입니다.
@@ -44,10 +44,10 @@ function createStorage<T extends StorageValueType>(
     create: function (key: string) {
       return {
         set: function (value: T) {
-          storage.setItem(key, serializeForStorage(value));
+          storage.setItem(key, serializeData(value));
         },
-        get: function (): T {
-          return deserializeFromStorage(storage.getItem(key) || "");
+        get: function (): T | null {
+          return deserializeData(storage.getItem(key));
         },
         delete: function () {
           storage.removeItem(key);
