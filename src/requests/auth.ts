@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/component";
-import { LoginError, SignUpError } from "~/src/utils/common/errors";
+import CustomError from "@/utils/common/errors/CustomError";
 import { userStorage } from "@/utils/storage/index";
 import { User } from "@supabase/supabase-js";
+import { SupabaseAuthResponse, SupabaseAuthData } from "@/types/auth";
 
 const supabase = createClient();
 
@@ -13,30 +14,41 @@ function handleUserData(user?: User | null): User {
   return userStorage.get();
 }
 
+async function handleSupabaseRequest(
+  fn: () => Promise<SupabaseAuthResponse>
+): Promise<SupabaseAuthData> {
+  const response: SupabaseAuthResponse = await fn();
+  const { data, error } = response;
+  if (error) {
+    throw new CustomError(`인증 에러가 발생하였습니다. 사유: ${error}`);
+  }
+  return data;
+}
+
 export async function authenticateUser(): Promise<User> {
-  const { data } = await supabase.auth.getUser();
-  return handleUserData(data.user);
+  try {
+    const { data } = await supabase.auth.getUser();
+    return handleUserData(data.user);
+  } catch {
+    throw new CustomError("인증 서버에 오류가 발생하였습니다.");
+  }
 }
 
 export async function requestToSignIn(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const data = await handleSupabaseRequest(() =>
+    supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+  );
 
-  if (error) {
-    throw new LoginError(error.message);
-  }
-
-  return handleUserData(data.user) ? data : undefined;
+  return handleUserData(data?.user);
 }
 
 export async function requestToSignUp(email: string, password: string) {
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const data = await handleSupabaseRequest(() =>
+    supabase.auth.signUp({ email, password })
+  );
 
-  if (error) {
-    throw new SignUpError(error.message);
-  }
-
-  return handleUserData(data.user) ? data : undefined;
+  return handleUserData(data?.user);
 }
