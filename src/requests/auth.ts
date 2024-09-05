@@ -15,10 +15,9 @@ function handleUserData(user?: User | null): User {
 }
 
 async function handleSupabaseRequest(
-  fn: () => Promise<SupabaseAuthResponse>
+  responsePromise: Promise<SupabaseAuthResponse>
 ): Promise<SupabaseAuthData> {
-  const response: SupabaseAuthResponse = await fn();
-  const { data, error } = response;
+  const { data, error } = await responsePromise;
   if (error) {
     throw new CustomError(`인증 에러가 발생하였습니다. 사유: ${error}`);
   }
@@ -35,7 +34,7 @@ export async function authenticateUser(): Promise<User> {
 }
 
 export async function requestToSignIn(email: string, password: string) {
-  const data = await handleSupabaseRequest(() =>
+  const data = await handleSupabaseRequest(
     supabase.auth.signInWithPassword({
       email,
       password,
@@ -46,7 +45,7 @@ export async function requestToSignIn(email: string, password: string) {
 }
 
 export async function requestToSignUp(email: string, password: string) {
-  const data = await handleSupabaseRequest(() =>
+  const data = await handleSupabaseRequest(
     supabase.auth.signUp({ email, password })
   );
 
