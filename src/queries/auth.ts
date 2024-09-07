@@ -1,6 +1,6 @@
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { authenticateUser } from "@/requests/auth";
-import { userStorage } from "@/utils/storage";
+import { userStorage } from "@/storages";
 
 const authenticateQueryOptions = queryOptions({
   queryKey: ["authenticate"],

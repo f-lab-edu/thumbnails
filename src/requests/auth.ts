@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/component";
 import CustomError from "@/utils/common/errors/CustomError";
-import { userStorage } from "@/utils/storage/index";
+import { userStorage } from "@/storages";
 import { User } from "@supabase/supabase-js";
 import { SupabaseAuthResponse, SupabaseAuthData } from "@/types/auth";
 
@@ -11,11 +11,7 @@ function handleUserData(user?: User | null): User {
   if (user) {
     userStorage.set(user);
   }
-  const storedUser = userStorage.get();
-  if (!storedUser) {
-    throw new CustomError("유효한 사용자 데이터가 없습니다.");
-  }
-  return storedUser;
+  return userStorage.get();
 }
 
 async function handleSupabaseRequest(
@@ -30,9 +26,7 @@ async function handleSupabaseRequest(
 
 export async function authenticateUser(): Promise<User> {
   try {
-    console.log("hihi!!");
     const { data } = await supabase.auth.getUser();
-    console.log("data: ", data);
     return handleUserData(data.user);
   } catch {
     throw new CustomError("인증 서버에 오류가 발생하였습니다.");

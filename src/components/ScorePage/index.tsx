@@ -1,5 +1,5 @@
 import Layout from "@/components/Common/Layout";
-import { userStorage } from "@/utils/storage";
+import { userStorage } from "@/storages";
 
 export default function ScorePage() {
   return (
